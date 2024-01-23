@@ -1,0 +1,10 @@
+.centerBox {
+  max-width: 1000px;
+  min-width: 800px;
+  min-height: 500px;
+  box-shadow: 0px 0px 25px 0px rgba(50, 50, 50, 0.25);
+  h1 {
+    margin-top: 20px;
+    color: darkGrey;
+  }
+}
