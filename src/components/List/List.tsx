@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Checkbox, Layout } from "antd";
 import "./List.css";
 import Link from "antd/es/typography/Link";
-import { getListName, subscribeToListItems } from "../../firebase/functions";
+import {
+  getListName,
+  subscribeToListItems,
+  toggleListItem,
+} from "../../firebase/functions";
 
 const { Content } = Layout;
 
@@ -18,17 +22,11 @@ const List: React.FC<ListProps> = ({ id }) => {
 
   useEffect(() => {
     if (id !== undefined) {
-      getListName(id, setListName);
-      subscribeToListItems(id, setListItems);
+      getListName(id, setListName).then(() => {
+        subscribeToListItems(id, setListItems);
+      });
     }
   }, [id]);
-
-  const toggleItem = (index: number) => {
-    // TODO
-    const tempItems = [...listItems!];
-    tempItems[index].completed = !tempItems[index].completed;
-    setListItems(tempItems);
-  };
 
   const addItem = (text: string) => {
     // TODO
@@ -49,14 +47,14 @@ const List: React.FC<ListProps> = ({ id }) => {
     <Content className="content">
       <h1>{listName}</h1>
       <hr />
-      {(listItems ?? []).map(function (item, index) {
+      {(listItems ?? []).map(function (item) {
         return (
           <>
             <Checkbox
               checked={item.completed}
               style={{ paddingTop: "10px" }}
               onChange={() => {
-                toggleItem(index);
+                toggleListItem(id!, item.id);
               }}
             >
               {item.text}

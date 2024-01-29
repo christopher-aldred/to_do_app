@@ -5,7 +5,7 @@ import List from "./components/List/List";
 import { useState } from "react";
 
 const App: React.FC = () => {
-  const [visibleListID, setListID] = useState<string | undefined>(
+  const [listID, setListID] = useState<string | undefined>(
     "QyLfE3fqqeJ8fxCy7iw6"
   );
 
@@ -13,7 +13,7 @@ const App: React.FC = () => {
     <>
       <Layout className="centerBox">
         <SideBar setListID={setListID} />
-        <List id={visibleListID} />
+        <List id={listID} />
       </Layout>
     </>
   );

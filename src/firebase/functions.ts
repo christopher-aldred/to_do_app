@@ -1,5 +1,11 @@
 import db from "./config";
-import { collection, onSnapshot, doc, getDoc } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  doc,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
 
 export async function getListName(
   id: string,
@@ -10,6 +16,19 @@ export async function getListName(
 
   if (docSnap.exists()) {
     setListName(docSnap.data().name);
+  } else {
+    console.log("No such document!");
+  }
+}
+
+export async function toggleListItem(listID: string, itemID: string) {
+  const docRefListItem = doc(db, `lists/${listID}/tasks/${itemID}`);
+  const docSnap = await getDoc(docRefListItem);
+
+  if (docSnap.exists()) {
+    await updateDoc(docRefListItem, {
+      completed: !docSnap.data().completed,
+    });
   } else {
     console.log("No such document!");
   }
