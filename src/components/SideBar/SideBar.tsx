@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Layout, Menu } from "antd";
 import "./SideBar.css";
+import { PlusOutlined } from "@ant-design/icons";
+import { subscribeToCollections } from "../../firebase/functions";
 
 const { Sider } = Layout;
 
-const SideBar: React.FC = () => {
+interface SideBarProps {
+  setListID: (id: string) => void;
+}
+
+const SideBar: React.FC<SideBarProps> = ({ setListID }) => {
+  const [lists, setLists] = useState<{ name: string; id: string }[]>();
+
+  useEffect(() => {
+    subscribeToCollections(setLists);
+  }, []);
+
   return (
     <Sider width={150}>
       <Menu
@@ -13,25 +25,36 @@ const SideBar: React.FC = () => {
         defaultOpenKeys={["sub1"]}
         className="menu"
       >
-        <Menu.Item title="" key="0" style={{ paddingLeft: "15px" }}>
-          Groceries
-        </Menu.Item>
-        <Menu.Item title="" key="1" style={{ paddingLeft: "15px" }}>
-          Bucket list
-        </Menu.Item>
+        {lists?.map(function (item) {
+          return (
+            <>
+              <Menu.Item
+                title=""
+                key={item.id}
+                style={{ paddingLeft: "15px" }}
+                onClick={() => {
+                  setListID(item.id);
+                }}
+              >
+                {item.name}
+              </Menu.Item>
+            </>
+          );
+        })}
+
         <Menu.Item
           title=""
           style={{
             position: "absolute",
             width: "fit-content",
-            padding: "17px",
+            padding: "15px",
             bottom: 0,
             zIndex: 1,
             transition: "all 0.2s",
           }}
           key="999"
         >
-          +
+          <PlusOutlined />
         </Menu.Item>
       </Menu>
     </Sider>
