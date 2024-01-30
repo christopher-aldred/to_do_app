@@ -109,7 +109,6 @@ const List: React.FC<ListProps> = ({ id }) => {
               addItem(newTask);
               setAdding(false);
             }}
-            onPress
           />
         )}
       </div>
