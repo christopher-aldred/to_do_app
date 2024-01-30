@@ -25,26 +25,9 @@ const List: React.FC<ListProps> = ({ id }) => {
   const [newTask, setNewTask] = useState("");
 
   useEffect(() => {
-    const handleEsc = (event: { key: string }) => {
-      if (event.key === "Escape") {
-        setAdding(false);
-        setNewTask("");
-      }
-    };
-    window.addEventListener("keydown", handleEsc);
-
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
-  }, []);
-
-  useEffect(() => {
     if (id !== undefined) {
       getListName(id, setListName).then(() => {
-        subscribeToListItems(id, setListItems).then(() => {
-          setAdding(false);
-          setNewTask("");
-        });
+        subscribeToListItems(id, setListItems);
       });
     }
   }, [id]);
@@ -99,6 +82,10 @@ const List: React.FC<ListProps> = ({ id }) => {
         ) : (
           <Input
             autoFocus
+            onBlur={() => {
+              setAdding(false);
+              setNewTask("");
+            }}
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
             style={{ padding: "0px" }}
@@ -107,7 +94,6 @@ const List: React.FC<ListProps> = ({ id }) => {
             variant="borderless"
             onPressEnter={() => {
               addItem(newTask);
-              setAdding(false);
             }}
           />
         )}
