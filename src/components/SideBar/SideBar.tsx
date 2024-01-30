@@ -19,18 +19,13 @@ const SideBar: React.FC<SideBarProps> = ({ setListID }) => {
 
   return (
     <Sider width={150}>
-      <Menu
-        mode="inline"
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
-        className="menu"
-      >
-        {lists?.map(function (item) {
+      <Menu mode="inline" defaultSelectedKeys={["0"]} className="menu">
+        {lists?.map(function (item, index) {
           return (
             <>
               <Menu.Item
                 title=""
-                key={item.id}
+                key={index}
                 style={{ paddingLeft: "15px" }}
                 onClick={() => {
                   setListID(item.id);

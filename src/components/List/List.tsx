@@ -40,19 +40,9 @@ const List: React.FC<ListProps> = ({ id }) => {
     setNewTask("");
   };
 
-  // const deleteItem = (id: string) => {
-  //   // TODO
-  //   console.log("DELETE: " + id);
-  // };
-
-  // const navigateToList = (id: string) => {
-  //   // TODO
-  //   console.log(id);
-  // };
-
   return (
     <Content className="content">
-      <h1>{listName ?? "Select a list"}</h1>
+      <h1>{listName ?? "Loading"}</h1>
       <hr />
       {(listItems ?? []).map(function (item) {
         return (
