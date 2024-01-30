@@ -11,6 +11,12 @@ import {
   getDocs,
 } from "firebase/firestore";
 
+export async function addCollection(inputName: string) {
+  await addDoc(collection(db, `lists`), {
+    name: inputName,
+  });
+}
+
 export async function getFirstListID() {
   const q = query(collection(db, "lists"));
   const querySnapshot = await getDocs(q);

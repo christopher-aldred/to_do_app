@@ -8,9 +8,10 @@ const { Sider } = Layout;
 
 interface SideBarProps {
   setListID: (id: string) => void;
+  addNewList: () => void;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ setListID }) => {
+const SideBar: React.FC<SideBarProps> = ({ setListID, addNewList }) => {
   const [lists, setLists] = useState<{ name: string; id: string }[]>();
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const SideBar: React.FC<SideBarProps> = ({ setListID }) => {
             transition: "all 0.2s",
           }}
           key="999"
+          onClick={addNewList}
         >
           <PlusOutlined />
         </Menu.Item>
