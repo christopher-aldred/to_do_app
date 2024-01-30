@@ -16,10 +16,10 @@ export async function addTaskToList(listID: string, text: string) {
 }
 
 export async function getListName(
-  id: string,
+  listID: string,
   setListName: (name: string) => void
 ) {
-  const docRef = doc(db, "lists", id);
+  const docRef = doc(db, "lists", listID);
   const docSnap = await getDoc(docRef);
 
   if (docSnap.exists()) {

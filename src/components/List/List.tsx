@@ -25,6 +25,20 @@ const List: React.FC<ListProps> = ({ id }) => {
   const [newTask, setNewTask] = useState("");
 
   useEffect(() => {
+    const handleEsc = (event: { key: string }) => {
+      if (event.key === "Escape") {
+        setAdding(false);
+        setNewTask("");
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, []);
+
+  useEffect(() => {
     if (id !== undefined) {
       getListName(id, setListName).then(() => {
         subscribeToListItems(id, setListItems).then(() => {
@@ -38,6 +52,7 @@ const List: React.FC<ListProps> = ({ id }) => {
   const addItem = (text: string) => {
     addTaskToList(id!, text);
     setAdding(false);
+    setNewTask("");
   };
 
   // const deleteItem = (id: string) => {
@@ -94,6 +109,7 @@ const List: React.FC<ListProps> = ({ id }) => {
               addItem(newTask);
               setAdding(false);
             }}
+            onPress
           />
         )}
       </div>
