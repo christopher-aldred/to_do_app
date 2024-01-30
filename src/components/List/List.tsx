@@ -4,11 +4,12 @@ import "./List.css";
 import Link from "antd/es/typography/Link";
 import {
   addTaskToList,
+  deleteTaskFromList,
   getListName,
   subscribeToListItems,
   toggleListItem,
 } from "../../firebase/functions";
-import { PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
 const { Content } = Layout;
 
@@ -23,6 +24,7 @@ const List: React.FC<ListProps> = ({ id }) => {
   const [listName, setListName] = useState<string | undefined>();
   const [adding, setAdding] = useState<boolean>(false);
   const [newTask, setNewTask] = useState("");
+  const [editMode] = useState(true);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -55,15 +57,27 @@ const List: React.FC<ListProps> = ({ id }) => {
       {(listItems ?? []).map(function (item) {
         return (
           <>
-            <Checkbox
-              checked={item.completed}
-              style={{ paddingTop: "10px" }}
-              onChange={() => {
-                toggleListItem(id!, item.id);
-              }}
-            >
-              {item.text}
-            </Checkbox>
+            <span>
+              <Checkbox
+                checked={item.completed}
+                style={{ paddingTop: "10px", width: "95%" }}
+                onChange={() => {
+                  toggleListItem(id!, item.id);
+                }}
+              >
+                {item.text}
+              </Checkbox>
+              {editMode == true ? (
+                <DeleteOutlined
+                  onClick={() => {
+                    deleteTaskFromList(id!, item.id);
+                  }}
+                  style={{ color: "red" }}
+                />
+              ) : (
+                <></>
+              )}
+            </span>
             <br />
           </>
         );
@@ -87,7 +101,11 @@ const List: React.FC<ListProps> = ({ id }) => {
               setNewTask("");
             }}
             value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
+            onChange={(e) => {
+              setNewTask(
+                e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
+              );
+            }}
             style={{ padding: "0px" }}
             prefix={<PlusOutlined />}
             placeholder="Enter todo"

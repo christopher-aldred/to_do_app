@@ -6,6 +6,7 @@ import {
   getDoc,
   updateDoc,
   addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 export async function addTaskToList(listID: string, text: string) {
@@ -13,6 +14,10 @@ export async function addTaskToList(listID: string, text: string) {
     text: text,
     completed: false,
   });
+}
+
+export async function deleteTaskFromList(listID: string, itemID: string) {
+  await deleteDoc(doc(db, `lists/${listID}/tasks/${itemID}`));
 }
 
 export async function getListName(
