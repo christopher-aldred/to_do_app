@@ -5,7 +5,15 @@ import {
   doc,
   getDoc,
   updateDoc,
+  addDoc,
 } from "firebase/firestore";
+
+export async function addTaskToList(listID: string, text: string) {
+  await addDoc(collection(db, `lists/${listID}/tasks`), {
+    text: text,
+    completed: false,
+  });
+}
 
 export async function getListName(
   id: string,

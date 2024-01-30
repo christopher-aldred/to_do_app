@@ -5,9 +5,7 @@ import List from "./components/List/List";
 import { useState } from "react";
 
 const App: React.FC = () => {
-  const [listID, setListID] = useState<string | undefined>(
-    "QyLfE3fqqeJ8fxCy7iw6"
-  );
+  const [listID, setListID] = useState<string | undefined>();
 
   return (
     <>
