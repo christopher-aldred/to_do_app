@@ -81,8 +81,10 @@ const AddCollectionModal: React.FC<ModalProps> = ({
         style={{ width: "100%" }}
         placeholder="Enter name"
         value={inputName}
-        onChange={(value) => {
-          setInputName(value.target.value);
+        onChange={(e) => {
+          setInputName(
+            e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+          );
         }}
         ref={inputRef}
         onKeyDown={handleKeyDown}

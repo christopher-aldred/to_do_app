@@ -10,17 +10,21 @@ import {
 const { Sider } = Layout;
 
 interface SideBarProps {
+  currentListID: string | undefined;
   setListID: (id: string) => void;
   addNewList: () => void;
   editMode: boolean;
   goToFirstList: () => void;
+  turnOffEditMode: () => void;
 }
 
 const SideBar: React.FC<SideBarProps> = ({
+  currentListID,
   setListID,
   addNewList,
   editMode,
   goToFirstList,
+  turnOffEditMode,
 }) => {
   const [lists, setLists] = useState<{ name: string; id: string }[]>();
 
@@ -29,9 +33,14 @@ const SideBar: React.FC<SideBarProps> = ({
   }, []);
 
   const deleteList = (id: string) => {
-    deleteCollection(id).then(() => {
-      goToFirstList();
-    });
+    if (currentListID === id) {
+      deleteCollection(id).then(() => {
+        goToFirstList();
+      });
+    } else {
+      deleteCollection(id);
+    }
+    turnOffEditMode();
   };
 
   return (

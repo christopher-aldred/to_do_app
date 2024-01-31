@@ -27,6 +27,7 @@ const App: React.FC = () => {
     <>
       <Layout className="centerBox">
         <SideBar
+          currentListID={listID}
           setListID={setListID}
           addNewList={() => {
             setShowModal(true);
@@ -34,6 +35,9 @@ const App: React.FC = () => {
           editMode={editMode}
           goToFirstList={async () => {
             setListID(await getFirstListID());
+          }}
+          turnOffEditMode={() => {
+            setEditMode(false);
           }}
         />
         <List id={listID} editMode={editMode} toggleEditMode={toggleEditMode} />

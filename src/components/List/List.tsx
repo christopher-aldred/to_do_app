@@ -38,8 +38,10 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
   }, [id]);
 
   const addItem = (text: string) => {
+    if (text === "" || text === undefined) {
+      return;
+    }
     addTaskToList(id!, text);
-    setAdding(false);
     setNewTask("");
   };
 
