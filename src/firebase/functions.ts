@@ -11,6 +11,14 @@ import {
   getDocs,
 } from "firebase/firestore";
 
+export async function deleteCollection(listID: string) {
+  const querySnapshot = await getDocs(collection(db, `lists/${listID}/tasks`));
+  querySnapshot.forEach(async (item) => {
+    await deleteDoc(doc(db, `lists/${listID}/tasks/${item.id}`));
+  });
+  await deleteDoc(doc(db, `lists/${listID}`));
+}
+
 export async function addCollection(inputName: string) {
   await addDoc(collection(db, `lists`), {
     name: inputName,

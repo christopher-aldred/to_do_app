@@ -1,22 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Layout, Menu } from "antd";
 import "./SideBar.css";
-import { PlusOutlined } from "@ant-design/icons";
-import { subscribeToCollections } from "../../firebase/functions";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  deleteCollection,
+  subscribeToCollections,
+} from "../../firebase/functions";
 
 const { Sider } = Layout;
 
 interface SideBarProps {
   setListID: (id: string) => void;
   addNewList: () => void;
+  editMode: boolean;
 }
 
-const SideBar: React.FC<SideBarProps> = ({ setListID, addNewList }) => {
+const SideBar: React.FC<SideBarProps> = ({
+  setListID,
+  addNewList,
+  editMode,
+}) => {
   const [lists, setLists] = useState<{ name: string; id: string }[]>();
 
   useEffect(() => {
     subscribeToCollections(setLists);
   }, []);
+
+  const deleteList = (id: string) => {
+    deleteCollection(id);
+    console.log("DELETE: " + id);
+  };
 
   return (
     <Sider width={150}>
@@ -26,10 +39,13 @@ const SideBar: React.FC<SideBarProps> = ({ setListID, addNewList }) => {
             <>
               <Menu.Item
                 title=""
+                icon={
+                  editMode ? <DeleteOutlined style={{ color: "red" }} /> : <></>
+                }
                 key={index}
                 style={{ paddingLeft: "15px" }}
                 onClick={() => {
-                  setListID(item.id);
+                  editMode ? deleteList(item.id) : setListID(item.id);
                 }}
               >
                 {item.name}

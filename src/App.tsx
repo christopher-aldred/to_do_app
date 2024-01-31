@@ -9,7 +9,11 @@ import AddCollectionModal from "./components/AddCollectionModal/AddCollectionMod
 const App: React.FC = () => {
   const [listID, setListID] = useState<string | undefined>();
   const [showModal, setShowModal] = useState<boolean>(false);
-  //const [editMode, setEditMode] = useState<boolean>(false);
+  const [editMode, setEditMode] = useState<boolean>(false);
+
+  function toggleEditMode() {
+    setEditMode(!editMode);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,8 +31,9 @@ const App: React.FC = () => {
           addNewList={() => {
             setShowModal(true);
           }}
+          editMode={editMode}
         />
-        <List id={listID} />
+        <List id={listID} editMode={editMode} toggleEditMode={toggleEditMode} />
         <AddCollectionModal
           shouldShow={showModal}
           closeModal={() => {

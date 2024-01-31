@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Checkbox, Input, Layout } from "antd";
+import { Checkbox, Input, Layout, Switch } from "antd";
 import "./List.css";
 import Link from "antd/es/typography/Link";
 import {
@@ -15,16 +15,17 @@ const { Content } = Layout;
 
 interface ListProps {
   id: string | undefined;
+  editMode: boolean;
+  toggleEditMode: () => void;
 }
 
-const List: React.FC<ListProps> = ({ id }) => {
+const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
   const [listItems, setListItems] = useState<
     { id: string; text: string; completed: boolean }[] | undefined
   >();
   const [listName, setListName] = useState<string | undefined>();
   const [adding, setAdding] = useState<boolean>(false);
   const [newTask, setNewTask] = useState("");
-  const [editMode] = useState(true);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -50,6 +51,7 @@ const List: React.FC<ListProps> = ({ id }) => {
             <span>
               <Checkbox
                 checked={item.completed}
+                disabled={editMode ? true : false}
                 style={{ paddingTop: "10px", width: "95%" }}
                 onChange={() => {
                   toggleListItem(id!, item.id);
@@ -75,7 +77,7 @@ const List: React.FC<ListProps> = ({ id }) => {
       <div style={{ paddingTop: "10px" }}>
         {adding == false ? (
           <Link
-            hidden={listName == undefined ? true : false}
+            hidden={listName == undefined || editMode == true ? true : false}
             href="#"
             onClick={() => {
               setAdding(true);
@@ -106,6 +108,19 @@ const List: React.FC<ListProps> = ({ id }) => {
           />
         )}
       </div>
+      <Switch
+        style={{
+          position: "absolute",
+          bottom: 0,
+          right: 0,
+          margin: "10px",
+          backgroundColor: editMode ? "red" : "lightGrey",
+        }}
+        checkedChildren="Delete"
+        unCheckedChildren="Delete"
+        defaultChecked={false}
+        onChange={toggleEditMode}
+      />
     </Content>
   );
 };
