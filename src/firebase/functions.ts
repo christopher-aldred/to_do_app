@@ -9,6 +9,9 @@ import {
   deleteDoc,
   query,
   getDocs,
+  serverTimestamp,
+  Timestamp,
+  orderBy,
 } from "firebase/firestore";
 
 export async function deleteCollection(listID: string) {
@@ -22,6 +25,7 @@ export async function deleteCollection(listID: string) {
 export async function addCollection(inputName: string) {
   const ref = await addDoc(collection(db, `lists`), {
     name: inputName,
+    sort: serverTimestamp(),
   });
   return ref.id;
 }
@@ -39,6 +43,7 @@ export async function addTaskToList(listID: string, text: string) {
   const ref = await addDoc(collection(db, `lists/${listID}/tasks`), {
     text: text,
     completed: false,
+    sort: serverTimestamp(),
   });
   return ref.id;
 }
@@ -49,7 +54,7 @@ export async function deleteTaskFromList(listID: string, itemID: string) {
 
 export async function getListName(
   listID: string,
-  setListName: (name: string) => void
+  setListName: (name: string) => void,
 ) {
   const docRef = doc(db, "lists", listID);
   const docSnap = await getDoc(docRef);
@@ -77,10 +82,13 @@ export async function toggleListItem(listID: string, itemID: string) {
 export async function subscribeToListItems(
   id: string,
   setListItems: (
-    lists: { id: string; text: string; completed: boolean }[]
-  ) => void
+    lists: { id: string; text: string; completed: boolean }[],
+  ) => void,
 ) {
-  const docRefLists = collection(db, `lists/${id}/tasks`);
+  const docRefLists = query(
+    collection(db, `lists/${id}/tasks`),
+    orderBy("sort"),
+  );
   const unsubscribe = onSnapshot(docRefLists, (querySnapshot) => {
     const listItems = querySnapshot.docs.map((doc) => {
       const data = doc.data();
@@ -88,6 +96,7 @@ export async function subscribeToListItems(
         id: doc.id,
         text: data.text,
         completed: data.completed,
+        sort: data.sort,
       };
     });
     setListItems(listItems);
@@ -98,15 +107,16 @@ export async function subscribeToListItems(
 }
 
 export async function subscribeToCollections(
-  setLists: (lists: { name: string; id: string }[]) => void
+  setLists: (lists: { id: string; name: string; sort: Timestamp }[]) => void,
 ) {
-  const docRefLists = collection(db, `lists`);
+  const docRefLists = query(collection(db, `lists`), orderBy("sort"));
   const unsubscribe = onSnapshot(docRefLists, (querySnapshot) => {
     const lists = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       return {
-        name: data.name,
         id: doc.id,
+        name: data.name,
+        sort: data.sort,
       };
     });
     setLists(lists);

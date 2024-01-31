@@ -31,26 +31,15 @@ const AddCollectionModal: React.FC<ModalProps> = ({
 
   const handleOk = async () => {
     setSubmitBtnLoading(true);
-    // let error: boolean = false;
     if (inputName !== "") {
       const newListID = await addCollection(inputName);
       setListID(newListID);
     }
-    // else {
-    //   error = true;
-    // }
 
     setTimeout(() => {
       setSubmitBtnLoading(false);
       closeModal();
       setInputName("");
-      /*
-      if (error === true) {
-        props.displayError("Must enter a user name");
-      } else {
-        props.displaySuccess("User added");
-      }
-      */
     }, 1000);
   };
 
