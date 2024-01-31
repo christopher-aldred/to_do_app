@@ -20,22 +20,27 @@ export async function deleteCollection(listID: string) {
 }
 
 export async function addCollection(inputName: string) {
-  await addDoc(collection(db, `lists`), {
+  const ref = await addDoc(collection(db, `lists`), {
     name: inputName,
   });
+  return ref.id;
 }
 
 export async function getFirstListID() {
   const q = query(collection(db, "lists"));
   const querySnapshot = await getDocs(q);
+  if (querySnapshot.docs.length < 1) {
+    return undefined;
+  }
   return querySnapshot.docs[0].id;
 }
 
 export async function addTaskToList(listID: string, text: string) {
-  await addDoc(collection(db, `lists/${listID}/tasks`), {
+  const ref = await addDoc(collection(db, `lists/${listID}/tasks`), {
     text: text,
     completed: false,
   });
+  return ref.id;
 }
 
 export async function deleteTaskFromList(listID: string, itemID: string) {

@@ -1,30 +1,40 @@
-import { Button, Input } from "antd";
+import { Button, Input, InputRef } from "antd";
 import Modal from "antd/es/modal/Modal";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { addCollection } from "../../firebase/functions";
 
 interface ModalProps {
   shouldShow: boolean;
   closeModal: () => void;
+  setListID: (id: string) => void;
 }
 
 const AddCollectionModal: React.FC<ModalProps> = ({
   shouldShow,
   closeModal,
+  setListID,
 }) => {
   const [submitBtnLoading, setSubmitBtnLoading] = useState(false);
   const [inputName, setInputName] = useState("");
+  const inputRef = useRef<InputRef | null>(null);
 
   const handleCancel = async () => {
     closeModal();
     setInputName("");
   };
 
+  const handleKeyDown = (event: { key: string }) => {
+    if (event.key === "Enter") {
+      handleOk();
+    }
+  };
+
   const handleOk = async () => {
     setSubmitBtnLoading(true);
     // let error: boolean = false;
     if (inputName !== "") {
-      addCollection(inputName);
+      const newListID = await addCollection(inputName);
+      setListID(newListID);
     }
     // else {
     //   error = true;
@@ -50,6 +60,9 @@ const AddCollectionModal: React.FC<ModalProps> = ({
       title="Add list"
       open={shouldShow}
       onCancel={handleCancel}
+      afterOpenChange={() => {
+        inputRef.current!.focus();
+      }}
       footer={[
         <Button key="back" onClick={handleCancel}>
           Cancel
@@ -71,6 +84,8 @@ const AddCollectionModal: React.FC<ModalProps> = ({
         onChange={(value) => {
           setInputName(value.target.value);
         }}
+        ref={inputRef}
+        onKeyDown={handleKeyDown}
       />
     </Modal>
   );

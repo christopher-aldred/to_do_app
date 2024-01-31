@@ -32,6 +32,9 @@ const App: React.FC = () => {
             setShowModal(true);
           }}
           editMode={editMode}
+          goToFirstList={async () => {
+            setListID(await getFirstListID());
+          }}
         />
         <List id={listID} editMode={editMode} toggleEditMode={toggleEditMode} />
         <AddCollectionModal
@@ -39,6 +42,7 @@ const App: React.FC = () => {
           closeModal={() => {
             setShowModal(false);
           }}
+          setListID={setListID}
         />
       </Layout>
     </>

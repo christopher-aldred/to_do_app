@@ -32,6 +32,8 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
       getListName(id, setListName).then(() => {
         subscribeToListItems(id, setListItems);
       });
+    } else {
+      setListName("Create a list to start");
     }
   }, [id]);
 
@@ -77,7 +79,11 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
       <div style={{ paddingTop: "10px" }}>
         {adding == false ? (
           <Link
-            hidden={listName == undefined || editMode == true ? true : false}
+            hidden={
+              listName == undefined || editMode == true || id == undefined
+                ? true
+                : false
+            }
             href="#"
             onClick={() => {
               setAdding(true);
@@ -116,8 +122,8 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
           margin: "10px",
           backgroundColor: editMode ? "red" : "lightGrey",
         }}
-        checkedChildren="Delete"
-        unCheckedChildren="Delete"
+        checkedChildren="EDIT"
+        unCheckedChildren=""
         defaultChecked={false}
         onChange={toggleEditMode}
       />

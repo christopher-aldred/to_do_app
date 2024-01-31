@@ -13,12 +13,14 @@ interface SideBarProps {
   setListID: (id: string) => void;
   addNewList: () => void;
   editMode: boolean;
+  goToFirstList: () => void;
 }
 
 const SideBar: React.FC<SideBarProps> = ({
   setListID,
   addNewList,
   editMode,
+  goToFirstList,
 }) => {
   const [lists, setLists] = useState<{ name: string; id: string }[]>();
 
@@ -27,8 +29,9 @@ const SideBar: React.FC<SideBarProps> = ({
   }, []);
 
   const deleteList = (id: string) => {
-    deleteCollection(id);
-    console.log("DELETE: " + id);
+    deleteCollection(id).then(() => {
+      goToFirstList();
+    });
   };
 
   return (
