@@ -54,7 +54,7 @@ const SideBar: React.FC<SideBarProps> = ({
                 icon={
                   editMode ? <DeleteOutlined style={{ color: "red" }} /> : <></>
                 }
-                key={index}
+                key={index.toString()}
                 style={{ paddingLeft: "15px" }}
                 onClick={() => {
                   editMode ? deleteList(item.id) : setListID(item.id);

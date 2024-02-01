@@ -31,7 +31,7 @@ export async function addCollection(inputName: string) {
 }
 
 export async function getFirstListID() {
-  const q = query(collection(db, "lists"));
+  const q = query(collection(db, "lists"), orderBy("sort"));
   const querySnapshot = await getDocs(q);
   if (querySnapshot.docs.length < 1) {
     return undefined;
