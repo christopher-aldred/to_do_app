@@ -150,7 +150,10 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
         checkedChildren="EDIT"
         unCheckedChildren=""
         defaultChecked={false}
-        onChange={toggleEditMode}
+        onChange={() => {
+          toggleEditMode();
+          setNewListName(listName!);
+        }}
       />
     </Content>
   );
