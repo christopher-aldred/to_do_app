@@ -3,7 +3,7 @@ import "./App.css";
 import SideBar from "./components/SideBar/SideBar";
 import List from "./components/List/List";
 import { useEffect, useState } from "react";
-import { getFirstListID } from "./firebase/functions";
+import { addCollection, getFirstListID } from "./firebase/functions";
 import AddCollectionModal from "./components/AddCollectionModal/AddCollectionModal";
 
 const App: React.FC = () => {
@@ -34,7 +34,10 @@ const App: React.FC = () => {
           }}
           editMode={editMode}
           goToFirstList={async () => {
-            setListID(await getFirstListID());
+            setListID(
+              (await getFirstListID()) ??
+                (await addCollection("My first list")),
+            );
           }}
           turnOffEditMode={() => {
             setEditMode(false);

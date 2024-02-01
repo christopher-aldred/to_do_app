@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox, Input, Layout, Switch } from "antd";
 import "./List.css";
 import Link from "antd/es/typography/Link";
@@ -28,7 +28,6 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
   const [adding, setAdding] = useState<boolean>(false);
   const [newTask, setNewTask] = useState("");
   const [newListName, setNewListName] = useState("");
-  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
     if (id !== undefined) {
