@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { Checkbox, Input, Layout, Switch } from "antd";
 import "./List.css";
 import Link from "antd/es/typography/Link";
@@ -8,6 +8,7 @@ import {
   getListName,
   subscribeToListItems,
   toggleListItem,
+  updateListName,
 } from "../../firebase/functions";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -26,12 +27,15 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
   const [listName, setListName] = useState<string | undefined>();
   const [adding, setAdding] = useState<boolean>(false);
   const [newTask, setNewTask] = useState("");
+  const [newListName, setNewListName] = useState("");
+  const [ignored, forceUpdate] = useReducer((x) => x + 1, 0);
 
   useEffect(() => {
     if (id !== undefined) {
       getListName(id, setListName).then(() => {
         subscribeToListItems(id, setListItems);
       });
+      getListName(id, setNewListName);
     } else {
       setListName("Create a list to start");
     }
@@ -47,7 +51,26 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
 
   return (
     <Content className="content">
-      <h1>{listName ?? "Loading"}</h1>
+      {editMode == false ? (
+        <h1>{listName ?? "Loading"}</h1>
+      ) : (
+        <Input
+          style={{ padding: 0, fontSize: "25px", fontWeight: "bold" }}
+          size="large"
+          value={newListName}
+          variant="borderless"
+          onChange={(e) => {
+            setNewListName(
+              e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+            );
+          }}
+          onPressEnter={() => {
+            updateListName(id!, newListName);
+            toggleEditMode();
+            setListName(newListName);
+          }}
+        />
+      )}
       <hr />
       {(listItems ?? []).map(function (item) {
         return (
@@ -103,7 +126,8 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
             value={newTask}
             onChange={(e) => {
               setNewTask(
-                e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1)
+                e.target.value.charAt(0).toUpperCase() +
+                  e.target.value.slice(1),
               );
             }}
             style={{ padding: "0px" }}

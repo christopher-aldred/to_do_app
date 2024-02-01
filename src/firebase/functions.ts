@@ -14,6 +14,14 @@ import {
   orderBy,
 } from "firebase/firestore";
 
+export async function updateListName(listID: string, newName: string) {
+  const ref = doc(db, `lists/${listID}`);
+
+  await updateDoc(ref, {
+    name: newName,
+  });
+}
+
 export async function deleteCollection(listID: string) {
   const querySnapshot = await getDocs(collection(db, `lists/${listID}/tasks`));
   querySnapshot.forEach(async (item) => {
