@@ -36,7 +36,7 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
       });
       getListName(id, setNewListName);
     } else {
-      setListName("Create a list to start");
+      setListName("Loading...");
     }
   }, [id]);
 
