@@ -11,6 +11,7 @@ import {
   updateListName,
 } from "../../firebase/functions";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import Title from "antd/es/typography/Title";
 
 const { Content } = Layout;
 
@@ -51,7 +52,16 @@ const List: React.FC<ListProps> = ({ id, editMode, toggleEditMode }) => {
   return (
     <Content className="content">
       {editMode == false ? (
-        <h1>{listName ?? "Loading"}</h1>
+        <Title
+          style={{
+            paddingLeft: 0,
+            marginTop: 4,
+            fontSize: "25px",
+            fontWeight: "bold",
+          }}
+        >
+          {listName ?? "Loading"}
+        </Title>
       ) : (
         <Input
           style={{ padding: 0, fontSize: "25px", fontWeight: "bold" }}
