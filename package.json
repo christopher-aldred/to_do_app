@@ -13,7 +13,7 @@
     "@ant-design/icons": "^5.2.6",
     "antd": "^5.13.2",
     "bootstrap": "^5.3.2",
-    "firebase": "^10.7.2",
+    "firebase": "^10.8.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.0",
     "react-dom": "^18.2.0"
